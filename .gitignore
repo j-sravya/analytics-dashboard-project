@@ -1,0 +1,4 @@
+.ipynb_checkpoints/
+.matplotlib/
+__pycache__/
+*.pyc

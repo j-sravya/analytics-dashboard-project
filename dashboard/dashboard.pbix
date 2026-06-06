@@ -1,0 +1,36 @@
+Power BI dashboard placeholder for portfolio submission.
+
+Power BI Desktop files use a proprietary binary format and should be created or edited in Microsoft Power BI Desktop.
+Use data/ecommerce_sales_data.csv as the data source and recreate the dashboard with the layout below.
+
+Pages:
+1. Executive Overview
+   - KPI cards: Total Revenue, Total Profit, Total Orders, Average Order Value
+   - Monthly sales trend
+   - Revenue by category
+   - Top city and most used payment method
+
+2. Sales Analysis
+   - Monthly revenue trend
+   - Profit by category
+   - City-wise sales
+   - Category slicer, city slicer, date slicer
+
+3. Customer Insights
+   - Customer segment distribution
+   - Segment-wise revenue and profit
+   - Payment method usage
+   - Shipping preference by segment
+
+4. Product Performance
+   - Top 10 products by revenue
+   - Revenue by product category
+   - Profit margin by category
+   - Units sold by product
+
+Recommended style:
+- Clean white canvas
+- Dark navy headers
+- Teal and blue accent colors
+- Rounded KPI cards
+- Clear slicers for month, city, category, and customer segment
