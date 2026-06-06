@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E-Commerce Power BI Dashboard</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --panel: #ffffff;
+      --ink: #1f2937;
+      --muted: #667085;
+      --line: #d9dee8;
+      --navy: #172554;
+      --blue: #2563eb;
+      --teal: #0f766e;
+      --amber: #d97706;
+      --green: #15803d;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 264px 1fr;
+    }
+
+    aside {
+      background: #101828;
+      color: #fff;
+      padding: 24px 18px;
+    }
+
+    .brand {
+      display: grid;
+      gap: 4px;
+      margin-bottom: 26px;
+    }
+
+    .brand strong {
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .brand span,
+    .filter label,
+    .small {
+      color: #b7c0d4;
+      font-size: 12px;
+    }
+
+    .filter {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    select {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid #334155;
+      border-radius: var(--radius);
+      background: #1e293b;
+      color: #fff;
+      padding: 8px 10px;
+      font: inherit;
+    }
+
+    main {
+      padding: 22px;
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 26px;
+      letter-spacing: 0;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .kpi,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+    }
+
+    .kpi {
+      min-height: 98px;
+      padding: 16px;
+      display: grid;
+      align-content: center;
+      gap: 6px;
+      border-left: 4px solid var(--blue);
+    }
+
+    .kpi:nth-child(2) {
+      border-left-color: var(--green);
+    }
+
+    .kpi:nth-child(3) {
+      border-left-color: var(--amber);
+    }
+
+    .kpi:nth-child(4) {
+      border-left-color: var(--teal);
+    }
+
+    .kpi span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .kpi strong {
+      font-size: 24px;
+      line-height: 1.15;
+      color: #111827;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 14px;
+    }
+
+    .panel {
+      min-height: 320px;
+      padding: 16px;
+    }
+
+    .panel.wide {
+      grid-column: 1 / -1;
+      min-height: 260px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      margin: 0;
+      color: #111827;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    .chart {
+      min-height: 238px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(100px, 165px) 1fr minmax(78px, auto);
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .bar-name {
+      color: #344054;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .bar-track {
+      height: 18px;
+      border-radius: 999px;
+      background: #e7eefc;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+    }
+
+    .bar-value {
+      color: #475467;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    svg {
+      width: 100%;
+      height: 238px;
+      display: block;
+    }
+
+    .axis {
+      stroke: #cbd5e1;
+      stroke-width: 1;
+    }
+
+    .line {
+      fill: none;
+      stroke: var(--teal);
+      stroke-width: 3;
+    }
+
+    .dot {
+      fill: var(--blue);
+      stroke: white;
+      stroke-width: 2;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
+        gap: 12px;
+        padding: 16px;
+      }
+
+      .brand {
+        grid-column: 1 / -1;
+        margin-bottom: 4px;
+      }
+
+      .filter {
+        margin-bottom: 0;
+      }
+
+      .kpis,
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .panel {
+        min-height: 280px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 14px;
+      }
+
+      aside,
+      .kpis,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .status {
+        text-align: left;
+      }
+
+      .bar-row {
+        grid-template-columns: minmax(82px, 110px) 1fr;
+      }
+
+      .bar-value {
+        grid-column: 2;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand">
+        <strong>Power BI Dashboard</strong>
+        <span>E-Commerce Sales Analytics</span>
+      </div>
+      <div class="filter">
+        <label for="monthFilter">Month</label>
+        <select id="monthFilter"></select>
+      </div>
+      <div class="filter">
+        <label for="categoryFilter">Product Category</label>
+        <select id="categoryFilter"></select>
+      </div>
+      <div class="filter">
+        <label for="cityFilter">City</label>
+        <select id="cityFilter"></select>
+      </div>
+      <div class="filter">
+        <label for="segmentFilter">Customer Segment</label>
+        <select id="segmentFilter"></select>
+      </div>
+      <div class="small">Use the slicers to update all KPIs and visuals.</div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <h1>Executive Overview</h1>
+          <div class="hint">Revenue, profit, orders, products, cities, and customer behavior.</div>
+        </div>
+        <div class="status" id="status">Loading dashboard data...</div>
+      </div>
+
+      <section class="kpis" aria-label="Dashboard KPI cards">
+        <article class="kpi"><span>Total Revenue</span><strong id="revenueKpi">-</strong></article>
+        <article class="kpi"><span>Total Profit</span><strong id="profitKpi">-</strong></article>
+        <article class="kpi"><span>Total Orders</span><strong id="ordersKpi">-</strong></article>
+        <article class="kpi"><span>Average Order Value</span><strong id="aovKpi">-</strong></article>
+      </section>
+
+      <section class="grid">
+        <article class="panel wide">
+          <div class="panel-head">
+            <h2>Monthly Sales Trend</h2>
+            <span class="hint" id="bestMonth">-</span>
+          </div>
+          <svg id="trendChart" role="img" aria-label="Monthly sales line chart"></svg>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Revenue by Category</h2>
+            <span class="hint" id="topCategory">-</span>
+          </div>
+          <div class="chart" id="categoryChart"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Top Cities by Sales</h2>
+            <span class="hint" id="topCity">-</span>
+          </div>
+          <div class="chart" id="cityChart"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Top Products</h2>
+            <span class="hint">By revenue</span>
+          </div>
+          <div class="chart" id="productChart"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Payment Methods</h2>
+            <span class="hint" id="topPayment">-</span>
+          </div>
+          <div class="chart" id="paymentChart"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const csvPath = "../data/ecommerce_sales_data.csv";
+    const filters = {
+      month: document.getElementById("monthFilter"),
+      category: document.getElementById("categoryFilter"),
+      city: document.getElementById("cityFilter"),
+      segment: document.getElementById("segmentFilter")
+    };
+
+    const formatCurrency = value =>
+      new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0
+      }).format(value);
+
+    const formatShortCurrency = value => {
+      if (value >= 10000000) return `Rs. ${(value / 10000000).toFixed(1)}Cr`;
+      if (value >= 100000) return `Rs. ${(value / 100000).toFixed(1)}L`;
+      return formatCurrency(value);
+    };
+
+    function parseCsv(text) {
+      const lines = text.trim().split(/\r?\n/);
+      const headers = lines.shift().split(",");
+      return lines.map(line => {
+        const values = line.split(",");
+        return headers.reduce((row, header, index) => {
+          row[header] = values[index] || "";
+          return row;
+        }, {});
+      });
+    }
+
+    function unique(rows, key) {
+      return [...new Set(rows.map(row => row[key]).filter(Boolean))].sort();
+    }
+
+    function fillFilter(select, values, label) {
+      select.innerHTML = `<option value="">All ${label}</option>`;
+      values.forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        select.appendChild(option);
+      });
+    }
+
+    function sumBy(rows, groupKey, valueKey) {
+      return rows.reduce((acc, row) => {
+        const key = row[groupKey] || "Unknown";
+        acc[key] = (acc[key] || 0) + Number(row[valueKey] || 0);
+        return acc;
+      }, {});
+    }
+
+    function countBy(rows, groupKey) {
+      return rows.reduce((acc, row) => {
+        const key = row[groupKey] || "Unknown";
+        acc[key] = (acc[key] || 0) + 1;
+        return acc;
+      }, {});
+    }
+
+    function sortedEntries(obj, limit) {
+      return Object.entries(obj).sort((a, b) => b[1] - a[1]).slice(0, limit);
+    }
+
+    function renderBars(id, entries, formatter = formatShortCurrency) {
+      const target = document.getElementById(id);
+      const max = Math.max(...entries.map(([, value]) => value), 1);
+      target.innerHTML = "";
+      entries.forEach(([name, value]) => {
+        const row = document.createElement("div");
+        row.className = "bar-row";
+        row.innerHTML = `
+          <div class="bar-name" title="${name}">${name}</div>
+          <div class="bar-track"><div class="bar" style="width:${Math.max(4, (value / max) * 100)}%"></div></div>
+          <div class="bar-value">${formatter(value)}</div>
+        `;
+        target.appendChild(row);
+      });
+    }
+
+    function renderTrend(rows) {
+      const svg = document.getElementById("trendChart");
+      const monthly = Object.entries(sumBy(rows, "month", "total_sales")).sort((a, b) => a[0].localeCompare(b[0]));
+      const width = svg.clientWidth || 800;
+      const height = 238;
+      const pad = { top: 14, right: 24, bottom: 34, left: 52 };
+      const innerWidth = width - pad.left - pad.right;
+      const innerHeight = height - pad.top - pad.bottom;
+      const max = Math.max(...monthly.map(([, value]) => value), 1);
+      const step = monthly.length > 1 ? innerWidth / (monthly.length - 1) : innerWidth;
+      const points = monthly.map(([, value], index) => {
+        const x = pad.left + index * step;
+        const y = pad.top + innerHeight - (value / max) * innerHeight;
+        return [x, y, value];
+      });
+      const path = points.map(([x, y], index) => `${index ? "L" : "M"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
+      const labels = monthly.filter((_, index) => index % Math.max(1, Math.ceil(monthly.length / 8)) === 0);
+
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = `
+        <line class="axis" x1="${pad.left}" y1="${pad.top + innerHeight}" x2="${pad.left + innerWidth}" y2="${pad.top + innerHeight}"></line>
+        <line class="axis" x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top + innerHeight}"></line>
+        <text x="8" y="18" fill="#667085" font-size="11">${formatShortCurrency(max)}</text>
+        <path class="line" d="${path}"></path>
+        ${points.map(([x, y, value]) => `<circle class="dot" cx="${x}" cy="${y}" r="4"><title>${formatCurrency(value)}</title></circle>`).join("")}
+        ${labels.map(([month], index) => {
+          const pointIndex = monthly.findIndex(([key]) => key === month);
+          const x = pad.left + pointIndex * step;
+          return `<text x="${x}" y="${height - 8}" text-anchor="${index === 0 ? "start" : "middle"}" fill="#667085" font-size="11">${month}</text>`;
+        }).join("")}
+      `;
+    }
+
+    function renderDashboard(allRows) {
+      const selected = {
+        month: filters.month.value,
+        category: filters.category.value,
+        city: filters.city.value,
+        segment: filters.segment.value
+      };
+      const rows = allRows.filter(row =>
+        (!selected.month || row.month === selected.month) &&
+        (!selected.category || row.product_category === selected.category) &&
+        (!selected.city || row.city === selected.city) &&
+        (!selected.segment || row.customer_segment === selected.segment)
+      );
+
+      const revenue = rows.reduce((sum, row) => sum + Number(row.total_sales || 0), 0);
+      const profit = rows.reduce((sum, row) => sum + Number(row.profit || 0), 0);
+      const orders = new Set(rows.map(row => row.order_id)).size;
+      const aov = orders ? revenue / orders : 0;
+
+      document.getElementById("revenueKpi").textContent = formatCurrency(revenue);
+      document.getElementById("profitKpi").textContent = formatCurrency(profit);
+      document.getElementById("ordersKpi").textContent = orders.toLocaleString("en-IN");
+      document.getElementById("aovKpi").textContent = formatCurrency(aov);
+      document.getElementById("status").textContent = `${rows.length.toLocaleString("en-IN")} rows shown`;
+
+      const categories = sortedEntries(sumBy(rows, "product_category", "total_sales"), 6);
+      const cities = sortedEntries(sumBy(rows, "city", "total_sales"), 8);
+      const products = sortedEntries(sumBy(rows, "product_name", "total_sales"), 8);
+      const payments = sortedEntries(countBy(rows, "payment_method"), 6);
+      const months = sortedEntries(sumBy(rows, "month", "total_sales"), 1);
+
+      renderTrend(rows);
+      renderBars("categoryChart", categories);
+      renderBars("cityChart", cities);
+      renderBars("productChart", products);
+      renderBars("paymentChart", payments, value => value.toLocaleString("en-IN"));
+
+      document.getElementById("topCategory").textContent = categories[0] ? `Top: ${categories[0][0]}` : "-";
+      document.getElementById("topCity").textContent = cities[0] ? `Top: ${cities[0][0]}` : "-";
+      document.getElementById("topPayment").textContent = payments[0] ? `Top: ${payments[0][0]}` : "-";
+      document.getElementById("bestMonth").textContent = months[0] ? `Best month: ${months[0][0]}` : "-";
+    }
+
+    fetch(csvPath)
+      .then(response => {
+        if (!response.ok) throw new Error("CSV could not be loaded");
+        return response.text();
+      })
+      .then(text => {
+        const rows = parseCsv(text);
+        fillFilter(filters.month, unique(rows, "month"), "Months");
+        fillFilter(filters.category, unique(rows, "product_category"), "Categories");
+        fillFilter(filters.city, unique(rows, "city"), "Cities");
+        fillFilter(filters.segment, unique(rows, "customer_segment"), "Segments");
+        Object.values(filters).forEach(select => select.addEventListener("change", () => renderDashboard(rows)));
+        window.addEventListener("resize", () => renderDashboard(rows));
+        renderDashboard(rows);
+      })
+      .catch(error => {
+        document.getElementById("status").textContent = `${error.message}. Start a local server from the project root.`;
+      });
+  </script>
+</body>
+</html>

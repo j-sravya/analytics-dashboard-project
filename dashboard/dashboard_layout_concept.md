@@ -1,5 +1,9 @@
 # Power BI Dashboard Layout Concept
 
+The project includes a working browser version of this dashboard at
+`dashboard/powerbi_dashboard.html`. It uses the same CSV dataset and mirrors the
+main Power BI report structure with KPI cards, slicers, and sales visuals.
+
 ## Page 1: Executive Overview
 
 - KPI cards: Total Revenue, Total Profit, Total Orders, Average Order Value, Top Category, Best City, Most Used Payment Method

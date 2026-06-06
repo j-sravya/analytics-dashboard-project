@@ -48,6 +48,7 @@ analytics-dashboard-project/
 ├── notebooks/
 │   └── ecommerce_sales_analysis.ipynb
 ├── dashboard/
+│   ├── powerbi_dashboard.html
 │   ├── dashboard.pbix
 │   └── dashboard_layout_concept.md
 ├── src/
@@ -158,14 +159,33 @@ python src/analysis.py
 
 ## Power BI Dashboard
 
-The `dashboard/` folder contains a Power BI dashboard concept with four pages:
+The `dashboard/` folder now includes a usable Power BI-style dashboard:
 
-* Executive Overview
-* Sales Analysis
-* Customer Insights
-* Product Performance
+* `dashboard/powerbi_dashboard.html` - interactive dashboard with KPI cards, slicer-style filters, monthly sales trend, category revenue, city sales, top products, and payment method analysis
+* `dashboard/dashboard_layout_concept.md` - Power BI Desktop page layout guide
+* `dashboard/dashboard.pbix` - Power BI file placeholder/export location
 
-Use `data/ecommerce_sales_data.csv` as the data source in Power BI Desktop and recreate the layout described in `dashboard/dashboard_layout_concept.md`.
+To view the HTML dashboard, start a local server from the project root:
+
+On Windows:
+
+```bat
+run_dashboard.cmd
+```
+
+Or with Python:
+
+```bash
+python -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000/dashboard/powerbi_dashboard.html
+```
+
+Use `data/ecommerce_sales_data.csv` as the data source in Power BI Desktop if you want to rebuild the same dashboard as a native `.pbix` report.
 
 ## Disclaimer
 
